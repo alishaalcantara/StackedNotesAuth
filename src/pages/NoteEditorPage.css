@@ -1,0 +1,267 @@
+.editor-page {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  background: #e8e8e8;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ─────────────────────────────────────── */
+.editor-topbar {
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Retractable search */
+.magnify-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  padding: 0.3rem;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.magnify-btn:hover {
+  background: #f0f0f0;
+  color: var(--primary);
+}
+
+.search-expand {
+  overflow: hidden;
+  max-width: 0;
+  transition: max-width 0.3s ease, opacity 0.25s;
+  opacity: 0;
+}
+
+.search-expand.open {
+  max-width: 240px;
+  opacity: 1;
+}
+
+.retractable-input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.88rem;
+  outline: none;
+  width: min(220px, 40vw);
+  background: #fafafa;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.retractable-input:focus {
+  border-color: var(--secondary);
+}
+
+.match-count {
+  font-size: 0.78rem;
+  color: #888;
+  white-space: nowrap;
+  margin-left: 0.4rem;
+}
+
+mark.search-highlight {
+  background: #FFE066;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ── Notebook page ────────────────────────────────── */
+.notebook-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 3rem;
+  gap: 2.5rem;
+}
+
+.notebook-page {
+  background: #fff;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  padding: 1.5rem 2rem 0 4rem;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Red margin line */
+.margin-line {
+  position: absolute;
+  top: 0;
+  left: 3.5rem;
+  width: 1px;
+  height: 100%;
+  background: #f5a0a0;
+  pointer-events: none;
+}
+
+/* Title input */
+.note-title-input {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  background: transparent;
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+  font-family: 'Georgia', serif;
+  line-height: 32px;
+  height: 32px;
+}
+
+.note-title-input::placeholder {
+  color: #bbb;
+}
+
+/* Page number label on pages 2+ */
+.page-number {
+  font-size: 0.75rem;
+  color: #aaa;
+  text-align: right;
+  line-height: 32px;
+  height: 32px;
+  font-family: 'Georgia', serif;
+  padding-right: 0.5rem;
+}
+
+/* Content editor — fixed 800px (25 lines), lines anchored to text */
+.note-editor {
+  height: 800px;
+  overflow: hidden;
+  outline: none;
+  font-size: 1rem;
+  line-height: 32px;
+  color: #222;
+  font-family: 'Georgia', serif;
+  word-break: break-word;
+  background-image: repeating-linear-gradient(
+    transparent 0px,
+    transparent 31px,
+    #b8d4f0 31px,
+    #b8d4f0 32px
+  );
+  background-size: 100% 32px;
+  background-position: 0 0;
+}
+
+/* Force every element the browser inserts while typing to respect the 32px grid */
+.note-editor *,
+.note-editor p,
+.note-editor div,
+.note-editor span,
+.note-editor font,
+.note-editor b,
+.note-editor i,
+.note-editor u,
+.note-editor mark {
+  line-height: 32px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.note-editor:empty::before {
+  content: attr(data-placeholder);
+  color: #bbb;
+  pointer-events: none;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.retractable-search {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.footer-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #444;
+}
+
+.cancel-btn:hover {
+  background: #ccc;
+}
+
+.save-btn {
+  background: var(--primary);
+  color: #fff;
+}
+
+.save-btn:hover {
+  background: #355f64;
+}
+
+/* ── Mobile ──────────────────────────────────────── */
+@media (max-width: 600px) {
+  /* Topbar: allow wrapping so toolbar doesn't get crushed */
+  .editor-topbar {
+    padding: 0.4rem 0.75rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .magnify-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .footer-btn {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  /* Notebook page: reduce left padding for the margin line */
+  .notebook-page {
+    padding: 1rem 0.75rem 0 2.5rem;
+  }
+  .margin-line {
+    left: 2rem;
+  }
+
+  /* Let the notebook fill the screen width */
+  .notebook-wrapper {
+    padding: 1rem 0.5rem 2rem;
+  }
+
+  /* Search expand: limit to available space */
+  .search-expand.open {
+    max-width: 160px;
+  }
+}

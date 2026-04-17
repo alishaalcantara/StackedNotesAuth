@@ -1,0 +1,112 @@
+.note-card {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.note-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.note-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #aaa;
+  padding: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: color 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+
+.bookmark-btn:hover {
+  color: #f0a500;
+  transform: scale(1.15);
+}
+
+.bookmark-btn.bookmarked {
+  color: #f0a500;
+}
+
+.note-card-preview {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.5;
+  flex: 1;
+  word-break: break-word;
+}
+
+.note-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.note-meta {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.note-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 0.55rem 0.9rem;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.edit-btn {
+  background: var(--secondary);
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: var(--primary);
+}
+
+.delete-btn {
+  background: #e05050;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #c03030;
+}

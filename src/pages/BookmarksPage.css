@@ -1,0 +1,51 @@
+.bookmarks-page {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  background: linear-gradient(135deg, #467B81 0%, #4A9BAA 50%, #CDCEC7 100%);
+  padding-bottom: 3rem;
+}
+
+.bookmarks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+}
+
+.bookmarks-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.star-icon {
+  color: #f0c040;
+}
+
+.bookmarks-count {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.empty-star {
+  font-size: 3.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+}
+
+.empty-state p {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .bookmarks-header {
+    padding: 1rem;
+  }
+}

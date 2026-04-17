@@ -1,0 +1,158 @@
+.trash-page {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  background: linear-gradient(135deg, #467B81 0%, #4A9BAA 50%, #CDCEC7 100%);
+  padding-bottom: 3rem;
+}
+
+.trash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+}
+
+.trash-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trash-icon {
+  font-size: 1.3rem;
+}
+
+.trash-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trash-count {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.empty-trash-btn {
+  background: rgba(220, 60, 60, 0.75);
+  border: none;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.empty-trash-btn:hover {
+  background: rgba(200, 40, 40, 0.9);
+}
+
+.trash-card {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  opacity: 0.92;
+}
+
+.trash-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.trash-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  word-break: break-word;
+}
+
+.deleted-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.trash-card-preview {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.trash-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.restore-btn {
+  background: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.restore-btn:hover {
+  background: var(--primary);
+}
+
+.perm-delete-btn {
+  background: #e05050;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.perm-delete-btn:hover {
+  background: #c03030;
+}
+
+.empty-icon {
+  font-size: 3.5rem;
+  opacity: 0.4;
+  line-height: 1;
+}
+
+.empty-state p {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .trash-header {
+    padding: 1rem;
+  }
+  .trash-card-actions {
+    flex-direction: column;
+  }
+  .restore-btn,
+  .perm-delete-btn {
+    width: 100%;
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+}
