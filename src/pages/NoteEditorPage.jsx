@@ -16,6 +16,7 @@ function NoteEditorPage() {
 
   const [title, setTitle] = useState('')
   const [pageIds, setPageIds] = useState(() => [`page-${Date.now()}`])
+  const [saveError, setSaveError] = useState('')
 
   const pageRefs = useRef({})
   const pendingContentRef = useRef({})
@@ -77,22 +78,18 @@ function NoteEditorPage() {
     getCleanContent,
   } = useInNoteSearch(pageIds, pageRefs)
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setSaveError('')
     const content = getCleanContent(pageIds).join(PAGE_BREAK)
     const now = Date.now()
-    if (isNew) {
-      saveNote({
-        id: now.toString(),
-        title: title.trim() || 'Untitled',
-        content,
-        createdAt: now,
-        updatedAt: now,
-        viewCount: 0,
-        isBookmarked: false,
-      })
-    } else {
-      const existing = notes.find(n => n.id === id) ?? {}
-      saveNote({ ...existing, title: title.trim() || 'Untitled', content, updatedAt: now })
+    const noteData = isNew
+      ? { id: now.toString(), title: title.trim() || 'Untitled', content, createdAt: now, updatedAt: now, viewCount: 0, isBookmarked: false }
+      : { ...(notes.find(n => n.id === id) ?? {}), title: title.trim() || 'Untitled', content, updatedAt: now }
+
+    const result = await saveNote(noteData)
+    if (result?.error) {
+      setSaveError('Failed to save — please try again.')
+      return
     }
     navigate('/')
   }
@@ -103,6 +100,7 @@ function NoteEditorPage() {
         <div className="topbar-actions">
           <button className="footer-btn cancel-btn" onClick={() => navigate('/')}>Cancel</button>
           <button className="footer-btn save-btn" onClick={handleSave}>Save Note</button>
+          {saveError && <span className="save-error">{saveError}</span>}
         </div>
 
         <FormatToolbar />

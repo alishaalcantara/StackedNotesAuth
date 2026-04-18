@@ -190,7 +190,14 @@ mark.search-highlight {
 
 .topbar-actions {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.save-error {
+  font-size: 0.8rem;
+  color: #e05050;
+  font-weight: 500;
 }
 
 .retractable-search {

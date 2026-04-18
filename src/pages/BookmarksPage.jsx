@@ -4,7 +4,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import './BookmarksPage.css'
 
 function BookmarksPage() {
-  const { notes, deleteNote, toggleBookmark } = useNotes()
+  const { notes, notesLoaded, deleteNote, toggleBookmark } = useNotes()
   const bookmarked = notes.filter(n => n.isBookmarked)
 
   return (
@@ -16,7 +16,7 @@ function BookmarksPage() {
         <span className="bookmarks-count">{bookmarked.length} note{bookmarked.length !== 1 ? 's' : ''}</span>
       </div>
 
-      {bookmarked.length === 0 ? (
+      {notesLoaded && bookmarked.length === 0 ? (
         <div className="empty-state">
           <div className="empty-star">☆</div>
           <p>No bookmarked notes yet.</p>

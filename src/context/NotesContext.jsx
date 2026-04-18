@@ -25,7 +25,7 @@ export function NotesProvider({ children }) {
     if (!user) return
 
     const fetchAll = async () => {
-      const [{ data: activeData }, { data: trashData }] = await Promise.all([
+      const [activeResult, trashResult] = await Promise.all([
         supabase
           .from('notes')
           .select('*')
@@ -40,8 +40,8 @@ export function NotesProvider({ children }) {
           .order('deleted_at', { ascending: false }),
       ])
 
-      if (activeData) setNotes(activeData.map(toApp))
-      if (trashData) setTrash(trashData.map(toApp))
+      if (!activeResult.error && activeResult.data) setNotes(activeResult.data.map(toApp))
+      if (!trashResult.error && trashResult.data) setTrash(trashResult.data.map(toApp))
       setNotesLoaded(true)
     }
 
@@ -49,8 +49,8 @@ export function NotesProvider({ children }) {
   }, [user])
 
   const saveNote = useCallback(async (noteData) => {
-    if (!user) return
-    const { data } = await supabase
+    if (!user) return { error: 'Not authenticated' }
+    const { data, error } = await supabase
       .from('notes')
       .upsert({
         id: noteData.id,
@@ -65,6 +65,7 @@ export function NotesProvider({ children }) {
       .select()
       .single()
 
+    if (error) return { error: error.message }
     if (data) {
       setNotes(prev => {
         const idx = prev.findIndex(n => n.id === data.id)
@@ -74,11 +75,12 @@ export function NotesProvider({ children }) {
         return updated
       })
     }
+    return { error: null }
   }, [user])
 
   const deleteNote = useCallback(async (id) => {
     if (!user) return
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ deleted_at: new Date().toISOString() })
       .eq('id', id)
@@ -86,6 +88,7 @@ export function NotesProvider({ children }) {
       .select()
       .single()
 
+    if (error) { console.error('deleteNote failed:', error); return }
     if (data) {
       setNotes(prev => prev.filter(n => n.id !== id))
       setTrash(prev => [toApp(data), ...prev])
@@ -97,7 +100,7 @@ export function NotesProvider({ children }) {
     const note = notes.find(n => n.id === id)
     if (!note) return
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ is_bookmarked: !note.isBookmarked })
       .eq('id', id)
@@ -105,12 +108,13 @@ export function NotesProvider({ children }) {
       .select()
       .single()
 
+    if (error) { console.error('toggleBookmark failed:', error); return }
     if (data) setNotes(prev => prev.map(n => n.id === id ? toApp(data) : n))
   }, [user, notes])
 
   const restoreNote = useCallback(async (id) => {
     if (!user) return
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ deleted_at: null })
       .eq('id', id)
@@ -118,6 +122,7 @@ export function NotesProvider({ children }) {
       .select()
       .single()
 
+    if (error) { console.error('restoreNote failed:', error); return }
     if (data) {
       setTrash(prev => prev.filter(n => n.id !== id))
       setNotes(prev => [toApp(data), ...prev])
@@ -126,23 +131,25 @@ export function NotesProvider({ children }) {
 
   const deletePermanently = useCallback(async (id) => {
     if (!user) return
-    await supabase
+    const { error } = await supabase
       .from('notes')
       .delete()
       .eq('id', id)
       .eq('user_id', user.id)
 
+    if (error) { console.error('deletePermanently failed:', error); return }
     setTrash(prev => prev.filter(n => n.id !== id))
   }, [user])
 
   const emptyTrash = useCallback(async () => {
     if (!user) return
-    await supabase
+    const { error } = await supabase
       .from('notes')
       .delete()
       .eq('user_id', user.id)
       .not('deleted_at', 'is', null)
 
+    if (error) { console.error('emptyTrash failed:', error); return }
     setTrash([])
   }, [user])
 
@@ -151,7 +158,7 @@ export function NotesProvider({ children }) {
     const note = notes.find(n => n.id === id)
     if (!note) return
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .update({ view_count: (note.viewCount ?? 0) + 1 })
       .eq('id', id)
@@ -159,6 +166,7 @@ export function NotesProvider({ children }) {
       .select()
       .single()
 
+    if (error) { console.error('incrementViewCount failed:', error); return }
     if (data) setNotes(prev => prev.map(n => n.id === id ? toApp(data) : n))
   }, [user, notes])
 

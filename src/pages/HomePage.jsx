@@ -7,7 +7,7 @@ import { stripHtml } from '../utils/text'
 import './HomePage.css'
 
 function HomePage() {
-  const { notes, deleteNote, toggleBookmark } = useNotes()
+  const { notes, notesLoaded, deleteNote, toggleBookmark } = useNotes()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('newest')
   const navigate = useNavigate()
@@ -74,7 +74,7 @@ function HomePage() {
         ))}
       </div>
 
-      {notes.length === 0 && (
+      {notesLoaded && notes.length === 0 && (
         <p className="empty-hint" style={{padding: '1rem 2rem'}}>No notes yet — click "Create New Note" to get started!</p>
       )}
     </div>

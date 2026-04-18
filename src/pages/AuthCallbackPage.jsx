@@ -12,6 +12,7 @@ function AuthCallbackPage() {
     if (code) {
       supabase.auth.exchangeCodeForSession(code)
         .then(() => navigate('/', { replace: true }))
+        .catch(() => navigate('/login', { replace: true }))
     } else {
       // Implicit flow: session lands in URL hash, onAuthStateChange picks it up
       navigate('/', { replace: true })

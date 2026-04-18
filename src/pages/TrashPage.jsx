@@ -3,7 +3,7 @@ import { stripHtml } from '../utils/text'
 import './TrashPage.css'
 
 function TrashPage() {
-  const { trash, restoreNote, deletePermanently, emptyTrash } = useNotes()
+  const { trash, notesLoaded, restoreNote, deletePermanently, emptyTrash } = useNotes()
 
   return (
     <div className="trash-page">
@@ -19,7 +19,7 @@ function TrashPage() {
         </div>
       </div>
 
-      {trash.length === 0 ? (
+      {notesLoaded && trash.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">🗑</div>
           <p>Trash is empty.</p>
