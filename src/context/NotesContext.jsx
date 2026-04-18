@@ -19,6 +19,7 @@ export function NotesProvider({ children }) {
   const { user } = useAuth()
   const [notes, setNotes] = useState([])
   const [trash, setTrash] = useState([])
+  const [notesLoaded, setNotesLoaded] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -41,6 +42,7 @@ export function NotesProvider({ children }) {
 
       if (activeData) setNotes(activeData.map(toApp))
       if (trashData) setTrash(trashData.map(toApp))
+      setNotesLoaded(true)
     }
 
     fetchAll()
@@ -164,6 +166,7 @@ export function NotesProvider({ children }) {
     <NotesContext.Provider value={{
       notes,
       trash,
+      notesLoaded,
       deleteNote,
       toggleBookmark,
       restoreNote,
@@ -177,6 +180,7 @@ export function NotesProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNotes() {
   const ctx = useContext(NotesContext)
   if (!ctx) throw new Error('useNotes must be used inside <NotesProvider>')

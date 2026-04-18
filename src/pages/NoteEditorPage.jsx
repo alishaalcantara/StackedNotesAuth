@@ -12,7 +12,7 @@ function NoteEditorPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const isNew = !id
-  const { notes, saveNote, incrementViewCount } = useNotes()
+  const { notes, notesLoaded, saveNote, incrementViewCount } = useNotes()
 
   const [title, setTitle] = useState('')
   const [pageIds, setPageIds] = useState(() => [`page-${Date.now()}`])
@@ -41,7 +41,8 @@ function NoteEditorPage() {
     return pageRefCallbacks.current[pageId]
   }, [])
 
-  // Reload content when navigating to a different note (id changes)
+  // Reload content on navigation (id changes) or when notes first loads from Supabase.
+  // Raw `notes` excluded — notesLoaded fires once on initial fetch without re-running on every update.
   useEffect(() => {
     if (isNew) {
       setTitle('')
@@ -50,6 +51,7 @@ function NoteEditorPage() {
       viewCountIncrementedRef.current = false
       return
     }
+    if (!notesLoaded) return
     const note = notes.find(n => n.id === id)
     if (!note) return
     setTitle(note.title)
@@ -58,7 +60,7 @@ function NoteEditorPage() {
     ids.forEach((pid, i) => { pendingContentRef.current[pid] = parts[i] })
     setPageIds(ids)
     viewCountIncrementedRef.current = false
-  }, [id, isNew]) // notes excluded intentionally — only reload on navigation // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id, isNew, notesLoaded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Increment view count exactly once per note visit
   useEffect(() => {
