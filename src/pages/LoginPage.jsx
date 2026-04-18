@@ -42,18 +42,22 @@ function LoginPage() {
     setMessage('')
     setSubmitting(true)
 
-    const { error: authError } = mode === 'login'
-      ? await signIn(email, password)
-      : await signUp(email, password)
-
-    setSubmitting(false)
-
-    if (authError) {
-      setError(authError.message)
-    } else if (mode === 'signup') {
-      setAwaitingVerification(true)
-      setMessage('Check your email to confirm your account.')
-      startCooldown()
+    if (mode === 'login') {
+      const { error: authError } = await signIn(email, password)
+      setSubmitting(false)
+      if (authError) setError(authError.message)
+    } else {
+      const { data, error: authError } = await signUp(email, password)
+      setSubmitting(false)
+      if (authError) {
+        setError(authError.message)
+      } else if (data.user?.identities?.length === 0) {
+        setError('An account with this email already exists. Please log in instead.')
+      } else {
+        setAwaitingVerification(true)
+        setMessage('Check your email to confirm your account.')
+        startCooldown()
+      }
     }
   }
 
