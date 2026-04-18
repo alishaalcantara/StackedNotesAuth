@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import './LoginPage.css'
 
+const RESEND_COOLDOWN = 60
+
 function LoginPage() {
-  const { signIn, signUp, user } = useAuth()
+  const { signIn, signUp, resendVerification, user } = useAuth()
   const navigate = useNavigate()
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
@@ -12,10 +14,27 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [awaitingVerification, setAwaitingVerification] = useState(false)
+  const [cooldown, setCooldown] = useState(0)
+  const timerRef = useRef(null)
 
   useEffect(() => {
     if (user) navigate('/', { replace: true })
   }, [user, navigate])
+
+  useEffect(() => {
+    return () => clearInterval(timerRef.current)
+  }, [])
+
+  const startCooldown = () => {
+    setCooldown(RESEND_COOLDOWN)
+    timerRef.current = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) { clearInterval(timerRef.current); return 0 }
+        return prev - 1
+      })
+    }, 1000)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -32,7 +51,21 @@ function LoginPage() {
     if (authError) {
       setError(authError.message)
     } else if (mode === 'signup') {
+      setAwaitingVerification(true)
       setMessage('Check your email to confirm your account.')
+      startCooldown()
+    }
+  }
+
+  const handleResend = async () => {
+    setError('')
+    setMessage('')
+    const { error: resendError } = await resendVerification(email)
+    if (resendError) {
+      setError(resendError.message)
+    } else {
+      setMessage('Verification email resent — check your inbox.')
+      startCooldown()
     }
   }
 
@@ -40,6 +73,9 @@ function LoginPage() {
     setMode(m => m === 'login' ? 'signup' : 'login')
     setError('')
     setMessage('')
+    setAwaitingVerification(false)
+    clearInterval(timerRef.current)
+    setCooldown(0)
   }
 
   return (
@@ -83,6 +119,19 @@ function LoginPage() {
             {submitting ? 'Please wait…' : mode === 'login' ? 'Log In' : 'Sign Up'}
           </button>
         </form>
+
+        {awaitingVerification && (
+          <div className="resend-row">
+            <span>Didn't receive it?</span>
+            <button
+              className="resend-btn"
+              onClick={handleResend}
+              disabled={cooldown > 0}
+            >
+              {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend email'}
+            </button>
+          </div>
+        )}
 
         <div className="login-toggle">
           {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
