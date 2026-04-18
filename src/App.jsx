@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
+import AuthCallbackPage from './pages/AuthCallbackPage'
 import HomePage from './pages/HomePage'
 import NoteEditorPage from './pages/NoteEditorPage'
 import BookmarksPage from './pages/BookmarksPage'
@@ -17,6 +18,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="/*" element={
             <ProtectedRoute>
               <NotesProvider>
