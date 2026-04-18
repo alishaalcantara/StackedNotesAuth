@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import { NotesProvider } from './context/NotesContext'
+import ProtectedRoute from './components/ProtectedRoute'
 import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
+import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import NoteEditorPage from './pages/NoteEditorPage'
 import BookmarksPage from './pages/BookmarksPage'
@@ -11,16 +14,25 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
-      <NotesProvider>
-        <Navbar />
+      <AuthProvider>
         <Routes>
-          <Route path="/" element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
-          <Route path="/note/new" element={<ErrorBoundary><NoteEditorPage /></ErrorBoundary>} />
-          <Route path="/note/:id" element={<ErrorBoundary><NoteEditorPage /></ErrorBoundary>} />
-          <Route path="/bookmarks" element={<ErrorBoundary><BookmarksPage /></ErrorBoundary>} />
-          <Route path="/trash" element={<ErrorBoundary><TrashPage /></ErrorBoundary>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/*" element={
+            <ProtectedRoute>
+              <NotesProvider>
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
+                  <Route path="/note/new" element={<ErrorBoundary><NoteEditorPage /></ErrorBoundary>} />
+                  <Route path="/note/:id" element={<ErrorBoundary><NoteEditorPage /></ErrorBoundary>} />
+                  <Route path="/bookmarks" element={<ErrorBoundary><BookmarksPage /></ErrorBoundary>} />
+                  <Route path="/trash" element={<ErrorBoundary><TrashPage /></ErrorBoundary>} />
+                </Routes>
+              </NotesProvider>
+            </ProtectedRoute>
+          } />
         </Routes>
-      </NotesProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

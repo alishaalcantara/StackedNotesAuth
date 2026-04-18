@@ -1,8 +1,16 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Navbar.css'
 
 function Navbar() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { signOut } = useAuth()
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <nav className="navbar">
@@ -17,6 +25,9 @@ function Navbar() {
         <Link to="/trash" className={`nav-link ${location.pathname === '/trash' ? 'active' : ''}`}>
           Trash
         </Link>
+        <button className="nav-logout" onClick={handleLogout}>
+          Log Out
+        </button>
       </div>
     </nav>
   )
