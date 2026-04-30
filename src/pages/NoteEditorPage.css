@@ -235,6 +235,17 @@ mark.search-highlight {
   background: #355f64;
 }
 
+.flashcard-btn {
+  background: transparent;
+  color: var(--secondary);
+  border: 2px solid var(--secondary);
+}
+
+.flashcard-btn:hover {
+  background: var(--secondary);
+  color: #fff;
+}
+
 /* ── Mobile ──────────────────────────────────────── */
 @media (max-width: 600px) {
   /* Topbar: allow wrapping so toolbar doesn't get crushed */

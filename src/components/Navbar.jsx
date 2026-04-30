@@ -22,6 +22,9 @@ function Navbar() {
         <Link to="/bookmarks" className={`nav-link ${location.pathname === '/bookmarks' ? 'active' : ''}`}>
           Bookmarks
         </Link>
+        <Link to="/flashcards" className={`nav-link ${location.pathname.startsWith('/flashcards') ? 'active' : ''}`}>
+          Flashcards
+        </Link>
         <Link to="/trash" className={`nav-link ${location.pathname === '/trash' ? 'active' : ''}`}>
           Trash
         </Link>

@@ -4,6 +4,7 @@ import { useNotes } from '../context/NotesContext'
 import { usePagination } from '../hooks/usePagination'
 import { useInNoteSearch } from '../hooks/useInNoteSearch'
 import FormatToolbar from '../components/FormatToolbar'
+import FlashcardModal from '../components/FlashcardModal'
 import './NoteEditorPage.css'
 
 const PAGE_BREAK = '<!--PAGE_BREAK-->'
@@ -17,6 +18,7 @@ function NoteEditorPage() {
   const [title, setTitle] = useState('')
   const [pageIds, setPageIds] = useState(() => [`page-${Date.now()}`])
   const [saveError, setSaveError] = useState('')
+  const [showFlashcardModal, setShowFlashcardModal] = useState(false)
 
   const pageRefs = useRef({})
   const pendingContentRef = useRef({})
@@ -100,6 +102,11 @@ function NoteEditorPage() {
         <div className="topbar-actions">
           <button className="footer-btn cancel-btn" onClick={() => navigate('/')}>Cancel</button>
           <button className="footer-btn save-btn" onClick={handleSave}>Save Note</button>
+          {!isNew && (
+            <button className="footer-btn flashcard-btn" onClick={() => setShowFlashcardModal(true)}>
+              Flashcard It!
+            </button>
+          )}
           {saveError && <span className="save-error">{saveError}</span>}
         </div>
 
@@ -155,6 +162,14 @@ function NoteEditorPage() {
           </div>
         ))}
       </div>
+
+      {showFlashcardModal && (
+        <FlashcardModal
+          noteId={id}
+          noteTitle={title}
+          onClose={() => setShowFlashcardModal(false)}
+        />
+      )}
     </div>
   )
 }
